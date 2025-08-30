@@ -10,3 +10,9 @@ jobs:
       - name: check version
         run: hostnamectl
 
+      - name: printwd
+        run: pwd
+
+      - name: who are you
+        run: whami
+

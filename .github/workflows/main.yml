@@ -14,5 +14,5 @@ jobs:
         run: pwd
 
       - name: who are you
-        run: whami
+        run: whoami
 

@@ -18,9 +18,12 @@ jobs:
     - name: Authenticate and Deploy To EC2
       run: |
         ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.USER_NAME }}@${{ secrets.HOST }} << 'EOF'
+        
+          sudo apt update
           sudo apt install nginx -y
           sudo systemctl enable nginx
           sudo systemctl restart nginx
           sudo git clone https://github.com/frankisinfotech/merchantPay.git
-          sudo cp -r /home/${{ secrets.USERNAME }}/merchantPay/* /var/www/html
+          ls -la
+          sudo cp -r /home/${{ secrets.USER_NAME }}/merchantPay/* /var/www/html
         EOF

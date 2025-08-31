@@ -1,18 +1,26 @@
-name: Emmatest
-
+name: deploy dashboard
 on: push
 
-
 jobs:
-  build:
+
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: check version
-        run: hostnamectl
+    - name: CheckOut
+      uses: actions/checkout@v5.0.0
 
-      - name: printwd
-        run: pwd
+    - name: Setup SSH
+      run: | 
+         echo "${{ secrets.SSH_KEY }}" > key.pem
+         chmod 600 key.pem
 
-      - name: who are you
-        run: whoami
-
+    - name: Authenticate and Deploy To EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no -i key.pem ${{ secrets.USER_NAME }}@${{ secrets.HOST }} << 'EOF'
+          sudo apt install nginx -y
+          sudo systemctl enable nginx
+          sudo systemctl restart nginx
+          sudo git clone https://github.com/frankisinfotech/merchantPay.git
+          sudo cp -r /home/${{ secrets.USERNAME }}/merchantPay/* /var/www/html
+        EOF
